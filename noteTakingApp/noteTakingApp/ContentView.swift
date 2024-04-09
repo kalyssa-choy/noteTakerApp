@@ -14,7 +14,7 @@ struct Note {
 }
 
 struct ContentView: View {
-    @State private var notes: [Note] = [Note(title: "hello", body: "meowmeowmoew"), Note(title: "BIINl", body: "meow")]
+    @State private var notes: [Note] = []
     
     var body: some View {
         NavigationView{

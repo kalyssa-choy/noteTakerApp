@@ -10,7 +10,9 @@ import SwiftUI
 struct NewNoteView: View {
     @State private var text: String = ""
     @State private var title: String = ""
+    @State private var showAlert: Bool = false
     @Binding var notes: [Note]
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView{
@@ -36,8 +38,13 @@ struct NewNoteView: View {
                 Spacer()
                 
                 Button(action: {
-                    var newNote: Note = Note(title: title, body: text)
-                    notes.append(newNote)
+                    //checking that there is text in the title and the body
+                    if text != "" && title != ""{
+                        let newNote: Note = Note(title: title, body: text)
+                        notes.append(newNote)
+                    }
+           
+                    showAlert = true
                     
                 }, label: {
                     Text("Add Note")
@@ -46,6 +53,24 @@ struct NewNoteView: View {
                         .background(Color.blue)
                         .cornerRadius(10)
                 })
+                
+                .alert(isPresented:$showAlert) {
+                    if text != "" && title != "" {
+                        return Alert(
+                            title: Text("Note has been added"),
+                            dismissButton: .default(Text("Return")) {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
+                        )
+                    }
+                    else {
+                        return Alert(
+                            title: Text("Could not add note"),
+                            message: Text("Must add a title or text to the body"),
+                            dismissButton: .default(Text("Okay"))
+                        )
+                    }
+                }
                 
                 Spacer()
             }
